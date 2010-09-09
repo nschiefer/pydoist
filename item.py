@@ -16,6 +16,9 @@ class Item:
         self.project = user.projects().find(id=self.project_id)
         self.user = user
 
+    def delete(self):
+        connect.connect(method="DELETE", url="deleteItems", params={'token': self.user.api_token, 'ids': "[" + self.id + "]"})
+
 class ItemList(list):
     def __init__(self, user):
         self.user = user
@@ -39,4 +42,10 @@ class ItemList(list):
         new_item = Item(json_data)
         self.append(new_item)
         return new_item
+
+    def delete(self):
+        for item in self:
+            item.delete()
+
+        self = ItemList(self.user)
 
