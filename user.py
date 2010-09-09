@@ -32,14 +32,22 @@ class User:
             self.password = password
         if(timezone):
             self.timezone = timezone
-
         connect.connects(url="updateUser", params={'token': self.api_token, 'email': self.email, 'password': self.password, 'full_name': self.full_name, 'timezone': self.timezon})
+
+    def projects(self):
+        projects_json_data = connect.connect(url="getProjects", params={'token': self.api_token})
+
+        projects = project.ProjectList()
+        for project_json_data in projects_json_data:
+            projects.append(project.Project(project_json_data, self))
+
+        return projects
 
 def login(email, password):
     json_data = connect.connects(url="login", params={'email': email, 'password': password})
     return User(json_data)
 
 def register(email, full_name, password, timezone):
-    json_data = connect.connects(url="register", params={'email': email, 'password': password, 'full_name': full_name, 'timezone': timezone})
+    json_data = connect.connects(method="POST", url="register", params={'email': email, 'password': password, 'full_name': full_name, 'timezone': timezone})
     return User(json_data)
 
