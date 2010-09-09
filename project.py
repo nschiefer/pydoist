@@ -1,4 +1,5 @@
 import connect
+import item
 
 class Project:
     def __init__(self, json_data, user):
@@ -32,11 +33,17 @@ class Project:
         connect.connect(method="PUT", url="updateProject", params=params)
 
     def items(self):
-        uncompleted_itmes_json_data = connect.connect(url="getUncompletedItems", params={'token': self.user.api_token, 'project_id': self.id})
+        uncompleted_items_json_data = connect.connect(url="getUncompletedItems", params={'token': self.user.api_token, 'project_id': self.id})
         completed_items_json_data = connect.connect(url="getCompletedItems", params={'token': self.user.api_token, 'project_id': self.id})
 
-        uncompleted_items = ItemList(self.user)
-        completed_items = ItemList(self.user)
+        uncompleted_items = item.ItemList(self.user)
+        completed_items = item.ItemList(self.user)
+
+        for item_data in uncompleted_items_json_data:
+            uncompleted_items.append(item.Item(item_data, self.user))
+
+        for item_data in completed_items_json_data:
+            completed_items.append(item.Item(item_data, self.user))
 
         return uncompleted_items + completed_items
 

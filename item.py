@@ -1,7 +1,7 @@
 import connect
 
 class Item:
-    def __init__(json_data, user):
+    def __init__(self, json_data, user):
         self.due_date = json_data['due_date']
         self.user_id = json_data['user_id']
         self.in_history = json_data['in_history']
