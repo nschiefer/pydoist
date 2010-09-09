@@ -30,7 +30,10 @@ def send_request(connection, method, url, params):
     response = connection.getresponse()
 
     if response.status == 200:
-        return json.loads(response.read())
+        try:
+            return json.loads(response.read())
+        except ValueError:
+            return ""
     else:
         print response.status, response.reason
 

@@ -18,7 +18,7 @@ class Item:
         self.user = user
 
     def delete(self):
-        connect.connect(method="DELETE", url="deleteItems", params={'token': self.user.api_token, 'ids': "[" + self.id + "]"})
+        connect.connect(method="DELETE", url="deleteItems", params={'token': self.user.api_token, 'ids': "[" + str(self.id) + "]"})
 
     def update(self, content=None, date_string=None, priority=None, indent=None, item_order=None, js_date=None):
         params={'token': self.user.api_token, 'id': self.id}
