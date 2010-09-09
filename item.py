@@ -19,6 +19,30 @@ class Item:
     def delete(self):
         connect.connect(method="DELETE", url="deleteItems", params={'token': self.user.api_token, 'ids': "[" + self.id + "]"})
 
+    def update(self, content=None, date_string=None, priority=None, indent=None, item_order=None, js_date=None):
+        params={'token': self.user.api_token, 'id': self.id}
+
+        if content:
+            params['content'] = content
+            self.content = content
+        if date_string
+            params['date_string'] = date_string
+            self.date_string = date_string
+        if priority
+            params['priority'] = priority
+            self.priority = priority
+        if indent
+            params['indent'] = indent
+            self.indent = indent
+        if item_order
+            params['item_order'] = item_order
+            self.item_order = item_order
+        if js_date
+            params['js_date'] = js_date
+            self.js_date = js_date
+
+        connect.connect(method="PUT", url="updateItem", params=params)
+
 class ItemList(list):
     def __init__(self, user):
         self.user = user
@@ -42,6 +66,10 @@ class ItemList(list):
         new_item = Item(json_data)
         self.append(new_item)
         return new_item
+
+    def update(self, content=None, date_string=None, priority=None, indent=None, item_order=None, js_date=None):
+        for item in self:
+            item.update(content, date_string, priority, indent, item_order, js_date)
 
     def delete(self):
         for item in self:
