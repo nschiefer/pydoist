@@ -15,3 +15,7 @@ class Item:
 
         self.user = user
 
+class ItemList(list):
+    def __init__(self, user):
+        self.user = user
+
