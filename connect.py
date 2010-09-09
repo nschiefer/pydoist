@@ -12,7 +12,7 @@ def connect(method="GET", url='', params={}):
     return send_request(connection, method, url, params)
 
 # secure version of connect
-def connect_secure(url, params):
+def connects(method="GET", url='', params={}):
     connection = httplib.HTTPSConnection("todoist.com")
 
     return send_request(connection, method, url, params)
@@ -22,9 +22,15 @@ def send_request(connection, method, url, params):
     dest = "/API/" + url + "?" + urllib.urlencode(params)
     print dest
 
-    connection.request(method, dest)
+    if method == "POST" or method == "PUT":
+        connection.request(method, dest, "", {"Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json", "Content-Length": "0"})
+    else:
+        connection.request(method, dest)
 
     response = connection.getresponse()
 
-    return json.loads(response.read())
+    if response.status == 200:
+        return json.loads(response.read())
+    else:
+        print response.status, response.reason
 
