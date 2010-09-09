@@ -37,7 +37,7 @@ class User:
     def projects(self):
         projects_json_data = connect.connect(url="getProjects", params={'token': self.api_token})
 
-        projects = project.ProjectList()
+        projects = project.ProjectList(self)
         for project_json_data in projects_json_data:
             projects.append(project.Project(project_json_data, self))
 
