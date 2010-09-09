@@ -19,3 +19,23 @@ class ItemList(list):
     def __init__(self, user):
         self.user = user
 
+    def add(self, content, project=None, date_string=None, priority=None, js_date=None):
+        params = {'token': self.user.api_token, 'content': content}
+
+        if not(project):
+            raise Exception
+        else:
+            params['project_id'] = project.id
+
+            if date_string:
+                params['date_string'] = date_string
+            if priority:
+                params['priority'] = priority
+            if js_date:
+                params['js_date'] = js_date
+
+        json_data = connect.connect(method="POST", url="addItem", params=params)
+        new_item = Item(json_data)
+        self.append(new_item)
+        return new_item
+
