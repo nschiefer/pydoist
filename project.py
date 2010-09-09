@@ -36,16 +36,15 @@ class Project:
         uncompleted_items_json_data = connect.connect(url="getUncompletedItems", params={'token': self.user.api_token, 'project_id': self.id})
         completed_items_json_data = connect.connect(url="getCompletedItems", params={'token': self.user.api_token, 'project_id': self.id})
 
-        uncompleted_items = item.ItemList(self.user)
-        completed_items = item.ItemList(self.user)
+        items = item.ItemList(self.user)
 
         for item_data in uncompleted_items_json_data:
-            uncompleted_items.append(item.Item(item_data, self.user))
+            items.append(item.Item(item_data, self.user))
 
         for item_data in completed_items_json_data:
-            completed_items.append(item.Item(item_data, self.user))
+            items.append(item.Item(item_data, self.user))
 
-        return uncompleted_items + completed_items
+        return items
 
 
 class ProjectList(list):
@@ -55,11 +54,11 @@ class ProjectList(list):
     def add(self, name, color=None, indent=None, order=None):
         params = {'token': self.user.api_token, 'name': name}
 
-        if(color):
+        if color :
             params['color'] = color
-        if(indent):
+        if indent :
             params['indent'] = indent
-        if(order):
+        if order:
             params['order'] = order
 
         json_data = connect.connect(method="POST", url="addProject", params=params)

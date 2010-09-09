@@ -25,19 +25,19 @@ class Item:
         if content:
             params['content'] = content
             self.content = content
-        if date_string
+        if date_string:
             params['date_string'] = date_string
             self.date_string = date_string
-        if priority
+        if priority:
             params['priority'] = priority
             self.priority = priority
-        if indent
+        if indent:
             params['indent'] = indent
             self.indent = indent
-        if item_order
+        if item_order:
             params['item_order'] = item_order
             self.item_order = item_order
-        if js_date
+        if js_date:
             params['js_date'] = js_date
             self.js_date = js_date
 
@@ -63,7 +63,7 @@ class ItemList(list):
                 params['js_date'] = js_date
 
         json_data = connect.connect(method="POST", url="addItem", params=params)
-        new_item = Item(json_data)
+        new_item = Item(json_data, self.user)
         self.append(new_item)
         return new_item
 
