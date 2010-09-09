@@ -77,3 +77,26 @@ class ItemList(list):
 
         self = ItemList(self.user)
 
+    def find(self, **kwargs):
+        matches = ItemList(self.user)
+
+        if kwargs.get('content', None):
+            for item in self:
+                if item.content == kwargs['content']:
+                    matches.append(item)
+        elif kwargs.get('id', None):
+            for item in self:
+                if item.id == kwargs['id']:
+                    matches.append(item)
+        elif kwargs.get('checked', None):
+            for item in self:
+                if item.checked == kwargs['checked']:
+                    matches.append(item)
+
+        if len(matches) == 0:
+            return None
+        elif len(matches) == 1:
+            return matches[0]
+        else:
+            return matches
+
