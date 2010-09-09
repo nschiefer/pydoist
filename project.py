@@ -31,6 +31,16 @@ class Project:
 
         connect.connect(method="PUT", url="updateProject", params=params)
 
+    def items(self):
+        uncompleted_itmes_json_data = connect.connect(url="getUncompletedItems", params={'token': self.user.api_token, 'project_id': self.id})
+        completed_items_json_data = connect.connect(url="getCompletedItems", params={'token': self.user.api_token, 'project_id': self.id})
+
+        uncompleted_items = ItemList(self.user)
+        completed_items = ItemList(self.user)
+
+        return uncompleted_items + completed_items
+
+
 class ProjectList(list):
     def __init__(self, user):
         self.user = user
@@ -47,6 +57,7 @@ class ProjectList(list):
 
         json_data = connect.connect(method="POST", url="addProject", params=params)
         new_project = Project(json_data, self.user)
+        self.append(new_project)
         return new_project
 
     def find(self, **kwargs):
