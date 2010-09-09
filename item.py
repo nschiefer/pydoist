@@ -12,6 +12,7 @@ class Item:
         self.project_id = json_data['project_id']
         self.checked = json_data['checked']
         self.date_string = json_data['date_string']
+        self.id = json_data['id']
 
         self.project = user.projects().find(id=self.project_id)
         self.user = user
