@@ -32,8 +32,11 @@ class Project:
         connect.connect(method="PUT", url="updateProject", params=params)
 
 class ProjectList(list):
+    def __init__(self, user):
+        self.user = user
+
     def add(self, name, color=None, indent=None, order=None):
-        params = {'token': self[0].user.api_token, 'name': name}
+        params = {'token': self.user.api_token, 'name': name}
 
         if(color):
             params['color'] = color
@@ -43,15 +46,16 @@ class ProjectList(list):
             params['order'] = order
 
         json_data = connect.connect(method="POST", url="addProject", params=params)
-        return Project(json_data, self[0].user.api_token)
+        new_project = Project(json_data, self.user)
+        return new_project
 
-    def find(**kwargs):
-        matches = ProjectList()
-        if kwargs.pop('id', None):
+    def find(self, **kwargs):
+        matches = ProjectList(self.user)
+        if kwargs.get('id', None) != None:
             for project in self:
                 if project.id == kwargs['id']:
                     matches.append(project)
-        elif kwargs.pop('name', None):
+        elif kwargs.get('name', None) != None:
             for project in self:
                 if project.name == kwargs['name']:
                     matches.append(project)
@@ -69,7 +73,7 @@ class ProjectList(list):
         for project in self:
             project.delete()
 
-        self = ProjectList()
+        self = ProjectList(self.user)
 
     def update(self, name=None, color=None, indent=None):
         for project in self:
