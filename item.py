@@ -44,6 +44,18 @@ class Item:
 
         connect.connect(method="PUT", url="updateItem", params=params)
 
+    def complete(self):
+        params={'token': self.user.api_token, 'ids': [self.id]}
+
+        connect.connect(method="PUT", url="completeItems", params=params)
+        self.checked = 1
+
+    def uncomplete(self):
+        params={'token': self.user.api_token, 'ids': [self.id]}
+
+        connect.connect(method="PUT", url="uncompleteItems", params=params)
+        self.checked = 0
+
 class ItemList(list):
     def __init__(self, user, project=None):
         self.user = user
