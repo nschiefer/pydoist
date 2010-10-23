@@ -52,7 +52,10 @@ class ItemList(list):
         params = {'token': self.user.api_token, 'content': content}
 
         if not(project):
-            raise Exception
+            if self.project():
+                project = self.project()
+            else
+                raise Exception
         else:
             params['project_id'] = project.id
 
@@ -77,6 +80,17 @@ class ItemList(list):
             item.delete()
 
         self = ItemList(self.user)
+
+    def project(self):
+        if len(self) > 0:
+            project = self[0].project
+
+            for item in self:
+                if item.project != project:
+                    return None
+
+            return project
+        return None
 
     def find(self, **kwargs):
         matches = ItemList(self.user)
