@@ -36,7 +36,7 @@ class Project:
         uncompleted_items_json_data = connect.connect(url="getUncompletedItems", params={'token': self.user.api_token, 'project_id': self.id})
         completed_items_json_data = connect.connect(url="getCompletedItems", params={'token': self.user.api_token, 'project_id': self.id})
 
-        items = item.ItemList(self.user)
+        items = item.ItemList(self.user, self)
 
         for item_data in uncompleted_items_json_data:
             items.append(item.Item(item_data, self.user))

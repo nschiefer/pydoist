@@ -45,8 +45,9 @@ class Item:
         connect.connect(method="PUT", url="updateItem", params=params)
 
 class ItemList(list):
-    def __init__(self, user):
+    def __init__(self, user, project=None):
         self.user = user
+        self.default_project = project
 
     def add(self, content, project=None, date_string=None, priority=None, js_date=None):
         params = {'token': self.user.api_token, 'content': content}
@@ -54,17 +55,17 @@ class ItemList(list):
         if not(project):
             if self.project():
                 project = self.project()
-            else
+            else:
                 raise Exception
-        else:
-            params['project_id'] = project.id
 
-            if date_string:
-                params['date_string'] = date_string
-            if priority:
-                params['priority'] = priority
-            if js_date:
-                params['js_date'] = js_date
+        params['project_id'] = project.id
+
+        if date_string:
+            params['date_string'] = date_string
+        if priority:
+            params['priority'] = priority
+        if js_date:
+            params['js_date'] = js_date
 
         json_data = connect.connect(method="POST", url="addItem", params=params)
         new_item = Item(json_data, self.user)
@@ -78,8 +79,7 @@ class ItemList(list):
     def delete(self):
         for item in self:
             item.delete()
-
-        self = ItemList(self.user)
+            self.remove(item)
 
     def project(self):
         if len(self) > 0:
@@ -90,7 +90,10 @@ class ItemList(list):
                     return None
 
             return project
-        return None
+        elif self.default_project:
+            return self.default_project
+        else:
+            return None
 
     def find(self, **kwargs):
         matches = ItemList(self.user)
